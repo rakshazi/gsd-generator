@@ -4,6 +4,39 @@ namespace Rakshazi;
 class GsdGenerator
 {
     /**
+     * Generate ld-json script with passed data and return it as string
+     *
+     * @param array $data Result data
+     *
+     * @return string
+     */
+    protected static function generateScript($data = [])
+    {
+        return '<script type="application/ld+json">'.json_encode($data).'</script>';
+    }
+
+    /**
+     * Generate sitename in search results script
+     * @link https://developers.google.com/search/docs/data-types/sitename
+     *
+     * @param string $name Your site name
+     * @param string $alt_name Alternative site name
+     * @param string $url Your site url
+     *
+     * @return string
+     */
+    public static function getSitename($name = '', $alt_name = '', $url = '')
+    {
+        return self::generateScript([
+            '@context' => 'http://schema.org',
+            '@type' => 'WebSite',
+            'name' => $name,
+            'alternateName' => $alt_name,
+            'url' => $url
+        ]);
+    }
+
+    /**
      * Generate breadcrumbs list
      * @link https://developers.google.com/search/docs/data-types/breadcrumbs
      *
@@ -38,9 +71,31 @@ class GsdGenerator
             ];
         }
 
-        return '<script type="application/ld+json">'.json_encode($result).'</script>';
+        return self::generateScript($result);
     }
-
+    
+    /**
+     * Generate script for sitelinks searchbox
+     * @link https://developers.google.com/search/docs/data-types/sitelinks-searchbox
+     *
+     * @param string $url Your site ROOT (homepage) url
+     * @param string $search_url Your site search url, MUST HAVE "{search_query}" text! Example: https://example.com/search?q={search_query}
+     *
+     * @return string
+     */
+    public static function getSearchbox($url = '', $search_url = '')
+    {
+        return self::generateScript([
+            '@context' => 'http://schema.org',
+            '@type' => 'WebSite',
+            'url' => $url,
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => $search_url,
+                'query-input' => 'required name=search_query',
+            ],
+        ]);
+    }
 
     /**
      * Generate Search Gallery -> Product
@@ -94,6 +149,6 @@ class GsdGenerator
             ],
         ];
 
-        return '<script type="application/ld+json">'.json_encode($result).'</script>';
+        return self::generateScript($result);
     }
 }
