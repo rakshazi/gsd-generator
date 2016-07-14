@@ -4,6 +4,6 @@
     "homepage": "https://github.com/rakshazi/gsd-generator",
     "keywords": ["microdata", "structured data", "google"],
     "license": "MIT",
-    "authors": { "name": "Nikita Chernyi", "role": "Developer" },
+    "authors": [{ "name": "Nikita Chernyi", "role": "Developer" }],
     "autoload": { "psr-4": { "Rakshazi\\":"src/" } }
 }
