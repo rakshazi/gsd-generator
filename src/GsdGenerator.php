@@ -131,11 +131,6 @@ class GsdGenerator
                 '@type' => 'Thing',
                 'name' => $item['brand']
             ],
-            'aggregateRating' => [
-                '@type' => 'AggregateRating',
-                'ratingValue' => $item['rating'],
-                'reviewCount' => $item['review_count'],
-            ],
             'offers' => [
                 '@type' => 'Offer',
                 'priceCurrency' => $item['currency'],
@@ -148,6 +143,14 @@ class GsdGenerator
                 ],
             ],
         ];
+
+        if (isset($item['rating']) && isset($item['review_count']) && $item['rating'] > 0 && $item['review_count'] > 0) {
+            $result['aggregateRating'] = [
+                '@type' => 'AggregateRating',
+                'ratingValue' => $item['rating'],
+                'reviewCount' => $item['review_count'],
+            ];
+        }
 
         return self::generateScript($result);
     }
